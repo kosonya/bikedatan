@@ -40,11 +40,14 @@ def main():
 #	m = Basemap(projection='merc',llcrnrlat=25,urcrnrlat=50,\
 #			llcrnrlon=-130,urcrnrlon=-70,lat_ts=20,resolution='c')	#USA
 
-	m = Basemap(projection='merc',llcrnrlat=35.5,urcrnrlat=39.9,\
-			llcrnrlon=-124.5,urcrnrlon=-118.5,lat_ts=20,resolution='c')	#Norcal
+#	m = Basemap(projection='merc',llcrnrlat=35.5,urcrnrlat=39.9,\
+#			llcrnrlon=-124.5,urcrnrlon=-118.5,lat_ts=20,resolution='c')	#Norcal
 
-	#m.shadedrelief()
-	m.drawlsmask()
+	m = Basemap(projection='merc',llcrnrlat=37.304294,urcrnrlat=37.840926,\
+			llcrnrlon=-122.559453,urcrnrlon=-121.859292,lat_ts=20,resolution='c')	#Bay Area
+
+	m.shadedrelief()
+	#m.drawlsmask()
 
 	#m.drawcoastlines()
 	m.drawcountries()
@@ -59,6 +62,16 @@ def main():
 	xs,ys = m(lon,lat)
 
 	m.plot(xs, ys, latlon=False, linestyle='circle marker', marker='o', markerfacecolor='blue', markersize=5)
+
+	start_coordinates = zip(*trip_coordinates_home_coordinates)[0]
+	lat, lon = zip(*start_coordinates)
+	xs,ys = m(lon,lat)
+	m.plot(xs, ys, latlon=False, linestyle='circle marker', marker='o', markerfacecolor='green', markersize=5)
+
+	end_coordinates = zip(*trip_coordinates_home_coordinates)[1]
+	lat, lon = zip(*end_coordinates)
+	xs,ys = m(lon,lat)
+	#m.plot(xs, ys, latlon=False, linestyle='circle marker', marker='o', markerfacecolor='red', markersize=5)
 
 	plt.show()
 
