@@ -18,6 +18,8 @@ import data_utils
 
 import sys
 import matplotlib.pyplot as plt
+from mpl_toolkits.basemap import Basemap
+import numpy as np
 
 def main():
 	trip_data = data_utils.load_trip_data()
@@ -29,9 +31,35 @@ def main():
 
 	home_coordinates = zip(*trip_coordinates_home_coordinates)[2]
 
+	#home_coordinates = filter(data_utils.is_bay_area_resident, home_coordinates)
+	
 	lat, lon = zip(*home_coordinates)
 
-	plt.scatter(lon, lat)
+#	m = Basemap(projection='merc',llcrnrlat=-80,urcrnrlat=80,\
+#			llcrnrlon=-180,urcrnrlon=180,lat_ts=20,resolution='c')	#World
+#	m = Basemap(projection='merc',llcrnrlat=25,urcrnrlat=50,\
+#			llcrnrlon=-130,urcrnrlon=-70,lat_ts=20,resolution='c')	#USA
+
+	m = Basemap(projection='merc',llcrnrlat=35.5,urcrnrlat=39.9,\
+			llcrnrlon=-124.5,urcrnrlon=-118.5,lat_ts=20,resolution='c')	#Norcal
+
+	#m.shadedrelief()
+	m.drawlsmask()
+
+	#m.drawcoastlines()
+	m.drawcountries()
+	m.drawstates()
+
+
+	#m.fillcontinents(color='0.8')
+	# draw parallels and meridians.
+	#m.drawparallels(np.arange(-90.,91.,30.))
+	#m.drawmeridians(np.arange(-180.,181.,60.))
+	#m.drawmapboundary(fill_color='aqua')
+	xs,ys = m(lon,lat)
+
+	m.plot(xs, ys, latlon=False, linestyle='circle marker', marker='o', markerfacecolor='blue', markersize=5)
+
 	plt.show()
 
 if __name__ == "__main__":

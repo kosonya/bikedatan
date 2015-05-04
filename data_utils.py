@@ -95,8 +95,8 @@ def get_trip_coordinates_home_coordinates(trip_coordinates_zip, zip_data, debug 
 	return res
 
 def is_bay_area_resident(coord):
-	min_lat, max_lon = 38.303527, -123.246161
-	max_lat, min_lon = 37.174116, -121.389471
+	max_lat, min_lon = 39.833016, -124.499227 #North-West
+	min_lat, max_lon = 35.549221, -118.566610 #South-East
 
 	lat, lon = coord
 
