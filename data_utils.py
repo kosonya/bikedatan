@@ -14,13 +14,32 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import data_utils
+def load_csv_data(fname):
+
+	with open(fname, "r") as f: #closes the file automatically
+		res = []
+		next(f)
+		for line in f:
+			line.rstrip('\n') #delete last \n only if present
+			vals = line.split(',')
+			res.append(vals)
+		return res
+
+def load_trip_data():
+	fname = "data/02/201402_trip_data.csv"
+	res = load_csv_data(fname)
+	return res
+
+
+def load_station_data():
+	fname = "data/02/201402_station_data.csv"
+	res = load_csv_data(fname)
+	return res
+
 
 
 def main():
-	trip_data = data_utils.load_trip_data()
-	start_end_zip = [(row[-7], row[-4], row[-1]) for row in trip_data if row[-2] == "Subscriber"]
-	print start_end_zip
+	pass
 
 if __name__ == "__main__":
 	main()
