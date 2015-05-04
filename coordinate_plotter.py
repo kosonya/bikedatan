@@ -16,11 +16,23 @@
 
 import data_utils
 
+import sys
+import matplotlib.pyplot as plt
 
 def main():
 	trip_data = data_utils.load_trip_data()
-	start_end_zip = [(row[-7], row[-4], row[-1]) for row in trip_data if row[-2] == "Subscriber"]
-	print start_end_zip
+	station_data = data_utils.load_station_data()
+	zip_data = data_utils.load_zip_data()
+	
+	trip_coordinates_zip = data_utils.get_trip_coordinates_zip(trip_data, station_data)
+	trip_coordinates_home_coordinates = data_utils.get_trip_coordinates_home_coordinates(trip_coordinates_zip, zip_data)
+
+	home_coordinates = zip(*trip_coordinates_home_coordinates)[2]
+
+	lat, lon = zip(*home_coordinates)
+
+	plt.scatter(lon, lat)
+	plt.show()
 
 if __name__ == "__main__":
 	main()
