@@ -17,6 +17,8 @@
 
 import traceback
 import math
+import dateutil.parser
+import datetime
 
 def haversine_dist(p1, p2):
 	#print p1
@@ -94,6 +96,22 @@ def get_trip_coordinates_zip(trip_data, station_data, debug = False):
 				traceback.print_exc()
 	return res
 		
+def get_trip_times_of_day(trip_data, debug = False):
+	res = []
+	for vals in trip_data:
+		try:
+			time_string = vals[2]
+			time_of_trip = dateutil.parser.parse(time_string)
+			start_of_day = datetime.datetime.combine(time_of_trip, datetime.time(0))
+			delta = time_of_trip - start_of_day
+			hours = float(delta.total_seconds())/3600.0 #Need this to get real-valued hours
+			res.append(hours)
+		except Exception as e:
+			if debug:
+				print e
+				traceback.print_exc()
+	return res
+
 def get_trip_coordinates_home_coordinates(trip_coordinates_zip, zip_data, debug = False):
 	res = []
 	for vals in trip_coordinates_zip:
