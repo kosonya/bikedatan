@@ -26,13 +26,17 @@ import numpy as np
 
 def main():
 	trip_data = data_utils.load_trip_data()
+	station_data = data_utils.load_station_data()
+	zip_data = data_utils.load_zip_data()
 
-	trip_times = data_utils.get_trip_times_of_day(trip_data)
+	from_home, to_home = data_utils.split_trips_to_from_home(trip_data, station_data, zip_data, debug = False)
 
 
+	from_home_trip_times = data_utils.get_trip_times_of_day(from_home)
+	n, bins, patches = plt.hist(from_home_trip_times, 50, normed=0, facecolor='blue', alpha=0.5)
 
-	n, bins, patches = plt.hist(trip_times, 50, normed=0, facecolor='blue', alpha=1)
-
+	to_home_trip_times = data_utils.get_trip_times_of_day(from_home)
+	n, bins, patches = plt.hist(to_home_trip_times, 50, normed=0, facecolor='green', alpha=0.5)
 
 	plt.xlabel("Hour of day")
 	plt.ylabel("Number of rides")

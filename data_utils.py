@@ -34,7 +34,6 @@ def haversine_dist(p1, p2):
 	return km
 
 def load_csv_data(fname):
-
 	with open(fname, "r") as f: #closes the file automatically
 		res = []
 		next(f)
@@ -49,7 +48,6 @@ def load_trip_data():
 	fname = "data/02/201402_trip_data.csv"
 	res = load_csv_data(fname)
 	return res
-
 
 def load_station_data():
 	fname = "data/02/201402_station_data.csv"
@@ -95,16 +93,20 @@ def get_trip_coordinates_zip(trip_data, station_data, debug = False):
 				print e
 				traceback.print_exc()
 	return res
-		
+
+def get_ride_time_of_day(vals):
+	time_string = vals[2]
+	time_of_trip = dateutil.parser.parse(time_string)
+	start_of_day = datetime.datetime.combine(time_of_trip, datetime.time(0))
+	delta = time_of_trip - start_of_day
+	hours = float(delta.total_seconds())/3600.0 #Need this to get real-valued hours	
+	return hours	
+	
 def get_trip_times_of_day(trip_data, debug = False):
 	res = []
 	for vals in trip_data:
 		try:
-			time_string = vals[2]
-			time_of_trip = dateutil.parser.parse(time_string)
-			start_of_day = datetime.datetime.combine(time_of_trip, datetime.time(0))
-			delta = time_of_trip - start_of_day
-			hours = float(delta.total_seconds())/3600.0 #Need this to get real-valued hours
+			hours = get_ride_time_of_day(vals)
 			res.append(hours)
 		except Exception as e:
 			if debug:
@@ -124,6 +126,33 @@ def get_trip_coordinates_home_coordinates(trip_coordinates_zip, zip_data, debug 
 				print e
 				traceback.print_exc()
 	return res
+
+def home_closer_to_start(vals, zip_data, station_data): #Unsafe, might throw an exception
+	start_terminal, end_terminal, zip_code = vals[-7], vals[-4], vals[-1]
+	start_lat_lon = get_station_lat_lon(station_data, start_terminal)
+	end_lat_lon = get_station_lat_lon(station_data, end_terminal)
+	home_lat_lon = zip_data[zip_code]
+	start_home_dist = haversine_dist(start_lat_lon, home_lat_lon)
+	end_home_dist = haversine_dist(end_lat_lon, home_lat_lon)
+	return start_home_dist > end_home_dist
+
+def split_trips_to_from_home(trip_data, station_data, zip_data, debug = False):
+	from_home = []
+	to_home = []
+	for vals in trip_data:
+		try:
+			if vals[-2] != "Subscriber":
+				continue
+			if home_closer_to_start(vals, zip_data, station_data):
+				from_home.append(vals)
+			else:
+				to_home.append(vals)
+		except Exception as e:
+			if debug:
+				print e
+				traceback.print_exc()
+	return from_home, to_home
+
 
 def is_bay_area_resident(coord):
 	max_lat, min_lon = 39.833016, -124.499227 #North-West
