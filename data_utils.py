@@ -16,7 +16,20 @@
 
 
 import traceback
+import math
 
+def haversine_dist(p1, p2):
+	#print p1
+	#print p2
+	lat1, lon1 = map(math.radians, p1)
+	lat2, lon2 = map(math.radians, p2)
+	earth_radius = 6367.0
+	dlon = lon2 - lon1
+	dlat = lat2 - lat1
+	a = math.pow(math.sin(dlon/2.0), 2) + math.cos(lon1) * math.cos(lon2) * math.pow(math.sin(dlat/2.0), 2)
+	c = 2.0 * math.asin(math.sqrt(a))
+	km = earth_radius * c
+	return km
 
 def load_csv_data(fname):
 
