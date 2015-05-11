@@ -61,17 +61,26 @@ Here be abstract.
         \label{fig:homezips}
 \end{figure}
 
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{../rides_from_home_to_home.png}
+	\caption{Number of rides per time of the day. Blue are the rides where the user's home is closer to the start point of the ride, and green are the opposite}
+	\label{fig:ridestofromhome}
+\end{figure}
 
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{../start_end_home.png}
+	\caption{Distribution of distances from user's home to the start point of the trip (blue) and the end point (green)}
+	\label{fig:ridestofromhome}
+\end{figure}
 
-
-\bibliographystyle{apa}
-
-\begin{thebibliography}{9}
-
-
-
-\end{thebibliography}
-
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{../travel_vector.png}
+	\caption{Distribution of distances from user's home to the start point of the trip (blue) and the end point (green)}
+	\label{fig:ridestofromhome}
+\end{figure}
 
 \end{document}
 

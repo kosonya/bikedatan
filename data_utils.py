@@ -20,6 +20,19 @@ import math
 import dateutil.parser
 import datetime
 
+
+def lat_lon_vect_to_km_vect(p1, p2):
+	lat1, lon1 = p1
+	lat2, lon2 = p2
+	p3 = lat2, lon1
+	dlat = haversine_dist(p1, p3)
+	dlon = haversine_dist(p2, p3)
+	if lat2 < lat1:
+		dlat = -dlat
+	if lon2 < lon1:
+		dlon = -dlon
+	return dlat, dlon	
+
 def haversine_dist(p1, p2):
 	#print p1
 	#print p2
@@ -53,6 +66,12 @@ def load_station_data():
 	fname = "data/02/201402_station_data.csv"
 	lst = load_csv_data(fname)
 	res = {vals[0]: vals[1:] for vals in lst}
+	return res
+
+def load_rebalancing_data():
+	fname = "data/02/201402_rebalancing_data.csv"
+	lst = load_csv_data(fname)
+	res = [(val[0], int(val[1]), int(val[2]), dateutil.parser.parse(val[3])) for val in lst]
 	return res
 
 def get_station_lat_lon(station_data, station_id):

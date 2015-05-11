@@ -41,11 +41,16 @@ def main():
 
 	#diff = home_coordinates - start_coordinates
 
-	diff = end_coordinates - start_coordinates
+	diff = np.zeros(end_coordinates.shape)
+	for nrow in xrange(end_coordinates.shape[0]):
+		diff[nrow] = data_utils.lat_lon_vect_to_km_vect(end_coordinates[nrow], start_coordinates[nrow])
+
 
 	plt.scatter(diff[:,[1]], diff[:,[0]])
 
-
+	plt.title("Vectors of rides")
+	plt.xlabel("Kilometers traveled, East is in the right")
+	plt.ylabel("Kilometers traveled, North in the top")
 	plt.show()
 
 if __name__ == "__main__":
