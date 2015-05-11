@@ -19,6 +19,7 @@ import traceback
 import math
 import dateutil.parser
 import datetime
+import os
 
 
 def lat_lon_vect_to_km_vect(p1, p2):
@@ -47,15 +48,15 @@ def haversine_dist(p1, p2):
 	return km
 
 def load_csv_data(fname):
+	res = []
 	with open(fname, "r") as f: #closes the file automatically
-		res = []
 		next(f)
 		for line in f:
 			line = line.rstrip('\n') #delete last \n only if present
 			line = line.rstrip('\r') #delete last \r only if present
 			vals = line.split(',')
 			res.append(vals)
-		return res
+	return res
 
 def load_trip_data():
 	fname = "data/02/201402_trip_data.csv"
@@ -68,11 +69,45 @@ def load_station_data():
 	res = {vals[0]: vals[1:] for vals in lst}
 	return res
 
-def load_rebalancing_data():
+def load_empty_full_station_times_of_day(debug = False):
 	fname = "data/02/201402_rebalancing_data.csv"
-	lst = load_csv_data(fname)
-	res = [(val[0], int(val[1]), int(val[2]), dateutil.parser.parse(val[3])) for val in lst]
-	return res
+	full_times = []
+	empty_times = []
+
+	fread_threshold = 100 / float(100)
+	report_step = 0.5 / float(100)
+	old_fdone = 0
+
+	with open(fname, "r") as f: #closes the file automatically
+		old_file_position = f.tell() #http://stackoverflow.com/questions/2104080/how-to-check-file-size-in-python
+		f.seek(0, os.SEEK_END)
+		fsize = f.tell()
+		f.seek(old_file_position, os.SEEK_SET)
+		next(f)
+		for line in f:
+			try:
+				line = line.rstrip('\n').rstrip('\r').replace('"', '')
+				vals = line.split(',')
+				if "0" in (vals[1], vals[2]):
+					time_of_day = get_ride_time_of_day((None, None, vals[-1]))
+					if vals[1] == "0":
+						empty_times.append(time_of_day)
+					elif vals[2] == "0":
+						full_times.append(time_of_day)
+				fcurpos = f.tell()
+				fdone = float(fcurpos)/fsize
+				if debug:
+					if fdone - old_fdone > report_step:
+						print fcurpos, "/", fsize, "(", 100*fdone, "% ) done"
+						#print vals
+						old_fdone = fdone
+				if float(fcurpos)/fsize > fread_threshold:
+					break
+			except Exception as e:
+				if debug:
+					print e
+					traceback.print_exc()
+	return empty_times, full_times
 
 def get_station_lat_lon(station_data, station_id):
 	vals = station_data[station_id]
@@ -81,8 +116,8 @@ def get_station_lat_lon(station_data, station_id):
 
 def load_zip_data(debug = False):
 	fname = "data/zip_codes_states.csv"
+	res = {}
 	with open(fname, "r") as f: #closes the file automatically
-		res = {}
 		next(f)
 		for line in f:
 			try:
@@ -95,7 +130,7 @@ def load_zip_data(debug = False):
 				if debug:
 					print e
 					traceback.print_exc()
-		return res
+	return res
 
 def get_trip_coordinates_zip(trip_data, station_data, debug = False):
 	res = []
