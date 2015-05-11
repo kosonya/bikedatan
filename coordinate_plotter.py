@@ -63,14 +63,14 @@ def main():
 
 	m.plot(xs, ys, latlon=False, linestyle='circle marker', marker='o', markerfacecolor='blue', markersize=5)
 
-	start_coordinates = zip(*trip_coordinates_home_coordinates)[0]
-	lat, lon = zip(*start_coordinates)
-	xs,ys = m(lon,lat)
-	m.plot(xs, ys, latlon=False, linestyle='circle marker', marker='o', markerfacecolor='green', markersize=5)
+	#start_coordinates = zip(*trip_coordinates_home_coordinates)[0]
+	#lat, lon = zip(*start_coordinates)
+	#xs,ys = m(lon,lat)
+	#m.plot(xs, ys, latlon=False, linestyle='circle marker', marker='o', markerfacecolor='green', markersize=5)
 
-	end_coordinates = zip(*trip_coordinates_home_coordinates)[1]
-	lat, lon = zip(*end_coordinates)
-	xs,ys = m(lon,lat)
+	#end_coordinates = zip(*trip_coordinates_home_coordinates)[1]
+	#lat, lon = zip(*end_coordinates)
+	#xs,ys = m(lon,lat)
 	#m.plot(xs, ys, latlon=False, linestyle='circle marker', marker='o', markerfacecolor='red', markersize=5)
 
 	plt.show()

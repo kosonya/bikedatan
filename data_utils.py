@@ -134,7 +134,7 @@ def home_closer_to_start(vals, zip_data, station_data): #Unsafe, might throw an 
 	home_lat_lon = zip_data[zip_code]
 	start_home_dist = haversine_dist(start_lat_lon, home_lat_lon)
 	end_home_dist = haversine_dist(end_lat_lon, home_lat_lon)
-	return start_home_dist > end_home_dist
+	return start_home_dist < end_home_dist
 
 def split_trips_to_from_home(trip_data, station_data, zip_data, debug = False):
 	from_home = []
