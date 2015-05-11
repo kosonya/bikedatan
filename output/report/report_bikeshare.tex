@@ -11,7 +11,7 @@
 \usepackage{subcaption}
 
 \title{Bay Area Bike Share Data Analysis}
-\author{Maxim Kovalev\\\texttt{maxim.kovalev@2007.auditory.ru}}
+\author{Maxim Kovalev\\\href{mailto:maxim.kovalev@2007.auditory.ru?subject=Bay Area BikeShare Data Analysis}{maxim.kovalev@2007.auditory.ru}}
 \date{May 2015}
 
 
@@ -56,9 +56,36 @@ Bay Area BikeShare (BABS) provides 4 data sets collected over 6 months of their 
 		Rebalancing data -- for every station, once a minute an observation is made how many bikes it has, and how many available docks it has.
 \end{enumerate}
 
+\section{Trip vectors and times}
+Figure \ref{fig:travelvector} reveals that relative to the station of departure, riders have a strong tendency to travel from East to West and back more than from North to South. Geographically, this pattern would be expected from San Fransisco, and \cite{babs} confirms that SF accounts for 90\% of all the rides, thus dominating the data set.
+
+As \cite{babs} has also shown, and I confirmed in Figure \ref{fig:sns}, annual subscribers dominate the data set, and exhibit a vastly different pattern compared to non-subscribers. Namely, the pattern of subscriber activity matches the scheme ``morning commute -> going out for lunch -> evening commute'', whereas non-subscribers ride far less, and smoothly peak in the mid-day, matching the pattern of tourist or leisure activity.
+
 \section{Home address distribution}
 
-For annual subscribers, ccording to \cite{babs}, 80\% of rides are done by subs
+For annual subscribers, home zip codes are provided. According to \cite{babs}, 80\% of rides are done by the subscribers, which warrants studying them as highly representative of the entire user base. Figure \ref{fig:homezips} shows where the subscribers live -- unsurprisingly, they mostly live in the Bay Area, and are particularly concentrated in the Peninsula, although statistically significant portion of them also lives elsewhere in the Northern California, and some outliers can be found in the entire country.
+
+\section{Distance between home and bike stations}
+
+Figure \ref{fig:startendhome} show the distribution of distances from user's home to the start point of a ride and the end point. By incorporating a 50 km threshold, I make sure to only count Bay Area residents. The distribution is noticeably multimodal, with the largest peak near zero, and the smaller but still significant peak around 20 kilometers. Incidentally, this is the distance between centers of San Francisco and Oakland, which could be a coincidence, but given the 90\% dominance of within-SF rides, it could well indicate that a significant number of people commute from East Bay by BART, and then take a bike.
+
+The distributions of distances from home to end and to start of the travel follow each other very closely. This is not surprising, given that, according to Figure \ref{fig:travelvector}, travels tend to be short, and both points are likely to be close to home. Furthermore, the accuracy of positioning by zip code may be not high enough to really distinguish such small differences -- it may well be the case that both the start and the end points are within the same zip code.
+
+However, a small difference may be noticed near the left border of the distribution. Namely, more rides apparently end start right next to the home than they end, and more rides end slightly faraway from home than they begin. Specifically, there are 57515 rides that start near home, and 55890 ones that end near home.
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{../travel_vector.png}
+	\caption{Distribution of travel vectors, in kilometers}
+	\label{fig:travelvector}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{../time_of_day_sub_not_sub.png}
+	\caption{Distribution of travel vectors, in kilometers}
+	\label{fig:sns}
+\end{figure}
 
 \begin{figure}
         \centering
@@ -89,22 +116,6 @@ For annual subscribers, ccording to \cite{babs}, 80\% of rides are done by subs
         \caption{Coordinates of home zip codes of subscribers}
         \label{fig:homezips}
 \end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[width=\textwidth]{../travel_vector.png}
-	\caption{Distribution of travel vectors, in kilometers}
-	\label{fig:travelvector}
-\end{figure}
-
-\begin{figure}
-	\centering
-	\includegraphics[width=\textwidth]{../time_of_day_sub_not_sub.png}
-	\caption{Distribution of travel vectors, in kilometers}
-	\label{fig:sns}
-\end{figure}
-
-
 
 \begin{figure}
 	\centering
